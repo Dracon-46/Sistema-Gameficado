@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Attribute Matrix — Arthur Gaspare</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0A0A0A; display: flex; flex-direction: column;
+           align-items: center; justify-content: center; min-height: 100vh;
+           font-family: 'Georgia', serif; color: #E8E4DC; padding: 24px; }
+    h2 { color: #C9A84C; font-size: 1rem; letter-spacing: 0.3em;
+         text-transform: uppercase; margin-bottom: 4px; }
+    .sub { color: #8B0000; font-size: 0.75rem; letter-spacing: 0.15em; margin-bottom: 20px; }
+    canvas { max-width: 480px; max-height: 480px; }
+    .stats { display: flex; gap: 24px; margin-top: 16px; font-size: 0.8rem; color: #888; }
+    .stats span { color: #C9A84C; font-size: 1.1rem; font-weight: bold; }
+    .end-block { margin-top: 12px; background: #1a0000; border: 1px solid #8B0000;
+                 padding: 8px 16px; border-radius: 4px; font-size: 0.8rem; color: #E8E4DC; }
+    .end-block strong { color: #8B0000; }
+  </style>
+</head>
+<body>
+  <h2>⚔ Attribute Matrix</h2>
+  <div class="sub">Chronicles of the Self — Iron Monk</div>
+  <canvas id="radar"></canvas>
+  <div class="stats">
+    <div>Power Score: <span id="ps">—</span></div>
+    <div>Rank: <span id="rank">—</span></div>
+  </div>
+  <div class="end-block">
+    💀 END — Endurance Mental (Goggins Stat): <strong id="end-val">—</strong> / 100
+  </div>
+  <script>
+    // ATUALIZE ESTES VALORES MANUALMENTE CONFORME SEUS ATRIBUTOS SOBEM NO NOTION
+    const attrs = {
+      STR: 30, VIT: 20, DIS: 45,
+      INT: 50, KNW: 42, SPR: 35,
+      DEX: 25, CHA: 30, END: 15
+    };
+    const labels = Object.keys(attrs);
+    const data = Object.values(attrs);
+    const ps = Math.round(data.reduce((a,b) => a+b,0) / data.length);
+    document.getElementById('ps').textContent = ps + ' / 100';
+    document.getElementById('rank').textContent = ps >= 80 ? 'S' : ps >= 60 ? 'A' : ps >= 45 ? 'B' : ps >= 30 ? 'C' : ps >= 20 ? 'D' : 'E';
+    document.getElementById('end-val').textContent = attrs.END;
+    new Chart(document.getElementById('radar'), {
+      type: 'radar',
+      data: { labels, datasets: [{
+        label: 'Current',
+        data, backgroundColor: 'rgba(139,0,0,0.2)',
+        borderColor: '#8B0000', pointBackgroundColor: '#C9A84C',
+        pointBorderColor: '#E8E4DC', borderWidth: 2, pointRadius: 6
+      }]},
+      options: {
+        responsive: true,
+        scales: { r: {
+          min: 0, max: 100,
+          ticks: { display: false, stepSize: 20 },
+          grid: { color: 'rgba(201,168,76,0.12)' },
+          angleLines: { color: 'rgba(201,168,76,0.2)' },
+          pointLabels: { color: '#E8E4DC', font: { size: 13, family: 'Georgia' } }
+        }},
+        plugins: { legend: { display: false } }
+      }
+    });
+  </script>
+</body>
+</html>
